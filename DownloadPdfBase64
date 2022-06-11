@@ -1,5 +1,0 @@
-// https://stackoverflow.com/questions/14011021/how-to-download-a-base64-encoded-image
-var a = document.createElement("a"); //Create <a>
-a.href = "data:application/pdf;base64," + thisForm.formVariables.getFormVariableByName("DocumentInBase64").getVariableValue(); //Image Base64 Goes here
-a.download = "File.pdf"; //File name Here
-a.click(); //Downloaded file
