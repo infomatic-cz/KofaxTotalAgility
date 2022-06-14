@@ -15,3 +15,5 @@ var a = document.createElement("a"); //Create <a>
 a.href = "data:"+FileMimeType+";base64," + FileBase64; //Image Base64 Goes here
 a.download = FileName; //File name Here
 a.click(); //Downloaded file
+
+test změna
