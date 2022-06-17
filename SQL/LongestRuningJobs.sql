@@ -14,7 +14,8 @@ select top (100)
 	FROM [dbo].[FINISHED_JOB] j
 	where --[PROCESS_NAME] = '' and		-- uncomment and add process name here
 		[FINISH_TIME] > [START_TIME] and
-		[START_TIME] between DATEADD(day,-1,getdate()) and getdate()
+		[START_TIME] between DATEADD(day,-1,getdate()) and DATEADD(day,1,getdate())	-- adding one day to now in case of different time zones between SQL server and client
+		-- and [VERSION] = 1	-- uncomment for specific version
 	order by Duration desc
 )
 select CTE.*
