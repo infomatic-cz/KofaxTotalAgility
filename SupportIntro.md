@@ -22,8 +22,8 @@ Form related issue:
 Job related issue:
 - Job id
 - Process name
-- Full error message from Job notes (usually newest note)
+- Full error message from Job notes (usually latest note)
 - Node name and type where issue appeared
-- Error message from Event log
+- Error message from Event log (if there is one)
 
 
