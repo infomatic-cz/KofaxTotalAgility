@@ -12,7 +12,7 @@ General information:
 - Full error message
 - Screenshot or video
 - Expected behavior
-- Actions that preceded issue appearance
+- Actions that preceded issue appearance (idealy steps to reproduce)
 - Folder id or document id
 
 Form related issue:
