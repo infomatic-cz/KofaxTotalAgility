@@ -13,8 +13,11 @@
 ![image](https://user-images.githubusercontent.com/77000568/174809896-dae14e40-c554-4b39-8a42-49d3b262daea.png)
 
 # KTA specific queries
-- [JobsCreatedPerMonth.sql](JobsCreatedPerMonth.sql) <br>
-![image](https://user-images.githubusercontent.com/77000568/174763221-38e8d680-2ca6-477a-9ca1-1e92ca4e2190.png)
+- [JobCountsCreatedOverTime.sql](JobCountsCreatedOverTime.sql) <br>
+![image](https://user-images.githubusercontent.com/77000568/175232537-e4c38154-c3d6-4091-9c97-559be7254e0e.png)
+![image](https://user-images.githubusercontent.com/77000568/175232618-0758f536-3691-45dc-8731-0a54266ccfe1.png)
+![image](https://user-images.githubusercontent.com/77000568/175232962-c9425791-8edf-4787-bd47-a5fa3e7e5318.png)
+![image](https://user-images.githubusercontent.com/77000568/175233181-5a2fc159-a919-423d-9d49-2c8d15662ba2.png)
 - [DocumentCountPerTypeInLastYear.sql](DocumentCountPerTypeInLastYear.sql) <br>
 ![image](https://user-images.githubusercontent.com/77000568/174810569-5c45fb13-6702-4b31-9443-8d7a3df1dc09.png)
 - [LongestRuningJobs.sql](LongestRuningJobs.sql) <br>
