@@ -13,6 +13,12 @@
 ![image](https://user-images.githubusercontent.com/77000568/174809896-dae14e40-c554-4b39-8a42-49d3b262daea.png)
 
 # KTA specific queries
+- [LoggerOnUsers.sql](LoggerOnUsers.sql) <br>
+![image](https://user-images.githubusercontent.com/77000568/175234143-d9cea06f-b7ad-473b-a05d-154694b02d25.png)
+- [UserActionsAudit.sql](UserActionsAudit.sql) <br>
+![image](https://user-images.githubusercontent.com/77000568/175235487-240758e7-4e1e-47e7-bb12-2b0bfc336018.png)
+- [UserLogingAudit.sql](UserLogingAudit.sql) <br>
+![image](https://user-images.githubusercontent.com/77000568/175235124-9164471d-f46a-4cc1-9d22-4364fe042d9c.png)
 - [JobCountsCreatedOverTime.sql](JobCountsCreatedOverTime.sql) <br>
 ![image](https://user-images.githubusercontent.com/77000568/175232537-e4c38154-c3d6-4091-9c97-559be7254e0e.png)
 ![image](https://user-images.githubusercontent.com/77000568/175232618-0758f536-3691-45dc-8731-0a54266ccfe1.png)
