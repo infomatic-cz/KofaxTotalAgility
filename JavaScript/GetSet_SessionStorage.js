@@ -1,4 +1,4 @@
-// For KTA 7.9 + new JavaScript SDK is available
+// For KTA 7.9 + new JavaScript API is available
 // https://docshield.kofax.com/KTA/en_US/7.9.0-ud9cfx6hos/help/Designer/All_Shared/UserInterface/t_actionjavascript.html
 Forms.SDK.GetGlobalVariableValue('CompanyCode');
 Forms.SDK.UpdateGlobalVariableValue('CompanyCode', 'comp123');
