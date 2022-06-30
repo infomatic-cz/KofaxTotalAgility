@@ -5,6 +5,8 @@
 ![image](https://user-images.githubusercontent.com/77000568/174808743-28266a1f-e2bc-45bc-a377-7984bdb21dc6.png)
 - [DBListTableRowCounts.sql](DBListTableRowCounts.sql) - returns row count for all tables in database <br>
 ![image](https://user-images.githubusercontent.com/77000568/174809185-4f1038ba-476d-4af3-bd95-d9de3bcd4b1b.png)
+- [DBListTableSize.sql](DBListTableSize.sql) - returns size of all tables in database <br>
+![image](https://user-images.githubusercontent.com/77000568/176723711-009c64c1-7625-403c-bb9f-4b263bb1f1fb.png)
 - [DBModifiedObjects.sql](DBModifiedObjects.sql) - returns last modified database objects (tables, procedures etc.) <br>
 ![image](https://user-images.githubusercontent.com/77000568/174809309-49c2c7ae-b538-49bc-9ea5-d06bece3e332.png)
 - [DBSize.sql](DBSize.sql) - returns file size for all databases <br>
