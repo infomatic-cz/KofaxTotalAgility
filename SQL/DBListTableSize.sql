@@ -4,11 +4,11 @@ SELECT
     t.NAME AS TableName,
     s.Name AS SchemaName,
     p.rows,
-    SUM(a.total_pages) * 8 AS TotalSpaceKB, 
+    --SUM(a.total_pages) * 8 AS TotalSpaceKB, 
     CAST(ROUND(((SUM(a.total_pages) * 8) / 1024.00), 2) AS NUMERIC(36, 2)) AS TotalSpaceMB,
-    SUM(a.used_pages) * 8 AS UsedSpaceKB, 
+    --SUM(a.used_pages) * 8 AS UsedSpaceKB, 
     CAST(ROUND(((SUM(a.used_pages) * 8) / 1024.00), 2) AS NUMERIC(36, 2)) AS UsedSpaceMB, 
-    (SUM(a.total_pages) - SUM(a.used_pages)) * 8 AS UnusedSpaceKB,
+    --(SUM(a.total_pages) - SUM(a.used_pages)) * 8 AS UnusedSpaceKB,
     CAST(ROUND(((SUM(a.total_pages) - SUM(a.used_pages)) * 8) / 1024.00, 2) AS NUMERIC(36, 2)) AS UnusedSpaceMB
 FROM 
     sys.tables t
@@ -27,4 +27,4 @@ WHERE
 GROUP BY 
     t.Name, s.Name, p.Rows
 ORDER BY 
-    TotalSpaceMB DESC, t.Name
+    TotalSpaceMB DESC, t.Name;
