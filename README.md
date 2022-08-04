@@ -1,7 +1,7 @@
 # KofaxTotalAgility
 Tools, code snipets and useful things for Kofax TotalAgility
 
-## Help & knowleage
+## Help & knowledge
 #### Documentation per version
 - [KTA 7.10](https://docshield.kofax.com/Portal/Products/en_US/KTA/7.10.0-vmhad0mru4/KTA.htm)
 - [KTA 7.9](https://docshield.kofax.com/Portal/Products/en_US/KTA/7.9.0-ud9cfx6hos/KTA.htm)
@@ -11,11 +11,11 @@ Tools, code snipets and useful things for Kofax TotalAgility
 - [KTA 7.5](https://docshield.kofax.com/Portal/Products/en_US/KTA/750-4kcae04o43/KTA.htm)
 - [KTA 7.4](https://docshield.kofax.com/Portal/Products/en_US/740-uc0n6j0c5s/KTA.htm)
 
-#### Knowleage
-- [KTA Main help](https://knowledge.kofax.com/Smart_Process_Applications_-_TotalAgility/Product_Documentation-User_Guides/TotalAgility_Product_Documentation) - article on Kofax Knowleage with links to help for all versions of KTA
-- [KTA Database guidance](https://files.mtstatic.com/site_12304/3662/0?Expires=1655295779&Signature=geSHOeRHnA1vg~lmf59cWw4URohA18q0YiAdsy2vEZ~ARevgr8z1B57qKqkxdkQQazx6ts8GhNCNtA2FiUKIJl8I9X5neur4It6iHB50qJocQviJtNTQ7kzIM6MW7jnWYYo5sfrzHX18Gh9LRJU07dnM-F3Ixwvzprsb697UKPU_&Key-Pair-Id=APKAJ5Y6AV4GI7A555NA) - article on Kofax Knowleage
-- [KTA How To](https://knowledge.kofax.com/Smart_Process_Applications_-_TotalAgility/How_To) - articles on Kofax Knowleage
-- [KTA Troubleshooting](https://knowledge.kofax.com/Smart_Process_Applications_-_TotalAgility/Troubleshooting) - articles on Kofax Knowleage
+#### Knowledge
+- [KTA Main help](https://knowledge.kofax.com/Smart_Process_Applications_-_TotalAgility/Product_Documentation-User_Guides/TotalAgility_Product_Documentation) - article on Kofax knowledge with links to help for all versions of KTA
+- [KTA Database guidance](https://files.mtstatic.com/site_12304/3662/0?Expires=1655295779&Signature=geSHOeRHnA1vg~lmf59cWw4URohA18q0YiAdsy2vEZ~ARevgr8z1B57qKqkxdkQQazx6ts8GhNCNtA2FiUKIJl8I9X5neur4It6iHB50qJocQviJtNTQ7kzIM6MW7jnWYYo5sfrzHX18Gh9LRJU07dnM-F3Ixwvzprsb697UKPU_&Key-Pair-Id=APKAJ5Y6AV4GI7A555NA) - article on Kofax knowledge
+- [KTA How To](https://knowledge.kofax.com/Smart_Process_Applications_-_TotalAgility/How_To) - articles on Kofax Knowledge
+- [KTA Troubleshooting](https://knowledge.kofax.com/Smart_Process_Applications_-_TotalAgility/Troubleshooting) - articles on Kofax Knowledge
 
 #### Potentionaly useful Kofax sites
 - [Kofax Partner Portal](https://partner.kofax.com/s/login/) - **TechSupport**
