@@ -40,7 +40,7 @@ namespace MyNamespace
                 // Usual input variables
                 string sessionId = sp.InputVariables["SPP_SYSTEM_SESSION_ID"].ToString();   // System session id from server variable
                 string folderId = sp.InputVariables["FOLDER_F938266C4CC640FC8C289D1FE732CD3E"].ToString();  // Expects Folder.InstanceId in Input variables
-                string documentId = sp.InputVariables["DOCUMETN_F938266C4CC640FC8C289D1FE732CD3E"].ToString(); // Expects Document.InstanceId in Input variables
+                string documentId = sp.InputVariables["DOCUMENT_F938266C4CC640FC8C289D1FE732CD3E"].ToString(); // Expects Document.InstanceId in Input variables
                             
                 // Define 
                 //CaptureDocumentService captureDocumentService = new CaptureDocumentService();
