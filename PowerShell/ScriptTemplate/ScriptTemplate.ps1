@@ -26,22 +26,62 @@ $printToFilePath = "C:\temp\result.json"    # Path to output file
 
 
 # ----- Execution -----
+
+# Ignore selfsigned certificates
+# https://stackoverflow.com/questions/36456104/invoke-restmethod-ignore-self-signed-certs
+if (-not("dummy" -as [type])) {
+    add-type -TypeDefinition @"
+using System;
+using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
+
+public static class Dummy {
+    public static bool ReturnTrue(object sender,
+        X509Certificate certificate,
+        X509Chain chain,
+        SslPolicyErrors sslPolicyErrors) { return true; }
+
+    public static RemoteCertificateValidationCallback GetDelegate() {
+        return new RemoteCertificateValidationCallback(Dummy.ReturnTrue);
+    }
+}
+"@
+}
+[System.Net.ServicePointManager]::ServerCertificateValidationCallback = [dummy]::GetDelegate()
+
 $JsonBody = $Body | ConvertTo-Json
-if ($useCurrentUserCredentials) {
-    # Use credentials of current user
-    $result = Invoke-RestMethod -ContentType application/json -Uri $Url -Method $method -Body $JsonBody -UseDefaultCredentials
-}
-else {
-    # Request credentials to use in call
-    $Cred = Get-Credential
-    $result = Invoke-RestMethod -ContentType application/json -Uri $Url -Method Post -Body $JsonBody -Credential $Cred
-}
 
-$resultJson = ConvertTo-Json $result
+# Try invoke method
+try {
+    if ($useCurrentUserCredentials) {
+        
+            
 
-if ($printToConsole) {
-    Write-Host $resultJson
-}
-if ($printToFile) {
-    Out-File -FilePath $printToFilePath -InputObject $resultJson -Encoding utf8
+        # Use credentials of current user
+        $result = Invoke-RestMethod -ContentType application/json -Uri $Url -Method $method -Body $JsonBody -UseDefaultCredentials
+        
+    }
+    else {
+        # Request credentials to use in call
+        $Cred = Get-Credential
+        $result = Invoke-RestMethod -ContentType application/json -Uri $Url -Method Post -Body $JsonBody -Credential $Cred
+    }
+
+    $resultJson = ConvertTo-Json $result
+
+    if ($printToConsole) {
+        Write-Host $resultJson
+    }
+    if ($printToFile) {
+        Out-File -FilePath $printToFilePath -InputObject $resultJson -Encoding utf8
+    }
+} catch {
+    # Dig into the exception to get the Response details.
+    # Note that value__ is not a typo.
+    Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__ 
+    Write-Host "StatusDescription:" $_.Exception.Response.StatusDescription
+    Write-Host "Message:" $_.Exception.Message
+    Write-Host "InnerException:" $_.Exception.InnerException
+    
 }
