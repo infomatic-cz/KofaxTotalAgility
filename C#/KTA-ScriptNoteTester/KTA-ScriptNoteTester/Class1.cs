@@ -29,7 +29,7 @@ namespace MyNamespace
         public LogCollection log = new LogCollection();
 
         [StartMethodAttribute()]
-        public void RunSetPageExtension(ScriptParameters sp)
+        public void TBD(ScriptParameters sp) // Set method name
         {
             // Log script parameters
             log.AppendScriptParameters(sp);
