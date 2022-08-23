@@ -181,6 +181,7 @@ namespace MyNamespace
                     this.DateTime = DateTime.Now;
                     this.Message = message;
                     this.Method = method;
+                    Console.WriteLine(this.ToString());
                 }
 
                 public override string ToString()
