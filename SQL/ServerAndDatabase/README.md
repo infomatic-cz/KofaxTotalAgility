@@ -13,3 +13,5 @@
 ![image](https://user-images.githubusercontent.com/77000568/174813247-61687a8f-fd2d-41b0-951c-c30a4fb39df2.png)
 - [DBTableRowCountDifferenceOverTime.sql](DBTableRowCountDifferenceOverTime.sql) - returns row count change over time <br>
 ![image](https://user-images.githubusercontent.com/77000568/174809896-dae14e40-c554-4b39-8a42-49d3b262daea.png)
+- [GetAndTerminateServerConnection.sql](GetAndTerminateServerConnection.sql) - returns connetions to server, terminate connection by spid <br>
+![image](https://user-images.githubusercontent.com/77000568/186878832-75eb1589-5bfc-4e76-a85a-a63ff6022dee.png)
