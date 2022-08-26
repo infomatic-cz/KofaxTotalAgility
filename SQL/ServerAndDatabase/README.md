@@ -1,6 +1,7 @@
 # Generic SQL queries
-- [ServerNameAndVersion.sql](ServerNameAndVersion.sql) - returns server version, server name and instance name <br>
+- [ServerNameAndVersion.sql](ServerNameAndVersion.sql) - returns server version, server name, instance name and basic database details (backup mode, collation, compatibility level) <br>
 ![image](https://user-images.githubusercontent.com/77000568/174812645-4e131bcf-429c-4e5c-801c-1373c7113b1d.png)
+![image](https://user-images.githubusercontent.com/77000568/186879243-4d92cd27-16f2-4401-86d1-26ffa2830745.png)
 - [DBIndexFragmentation.sql](DBIndexFragmentation.sql) - returns all indexes in database with average fragmentation <br>
 ![image](https://user-images.githubusercontent.com/77000568/174808743-28266a1f-e2bc-45bc-a377-7984bdb21dc6.png)
 - [DBListTableRowCounts.sql](DBListTableRowCounts.sql) - returns row count for all tables in database <br>
