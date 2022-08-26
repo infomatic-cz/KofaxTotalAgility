@@ -5,4 +5,5 @@
 exec sp_who
 
 -- Kill specific connetion by id (xxx = spid from previous result)
+-- Require ALTER ANY CONNECTION permission (sysadmin or processadmin fixed server roles)
 KILL xxx
