@@ -2,7 +2,7 @@
 var jobid = "D14D6866230511ED8136005056940698";
 var variableid = "FOLDER";
 
-// 
+// payload structure
 var GetJobVariableValueStruct = function () {
 var struct = {
     "sessionId": "",
@@ -17,6 +17,7 @@ var struct = {
 return struct;
 };
 
+// populate data
 var getJobVariable = new GetJobVariableValueStruct();
 
 getJobVariable.sessionId = JSON.parse(sessionStorage.getItem("SESSION_ID")).value;
@@ -25,7 +26,7 @@ getJobVariable.variableIdentity.Id = variableid;
 
 //$("#Request").html("<BR/><B>Request:</B><BR/>" + JSON.stringify(createJobJSON));
 
-// Calling method CreateJob
+// call method
 $.ajax({
 type: "POST",
 async: "false",
