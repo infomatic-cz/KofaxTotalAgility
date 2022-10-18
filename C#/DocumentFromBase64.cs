@@ -39,8 +39,7 @@ namespace MyNamespace
                 // ---- Start logic here ----
                 // Usual input variables
                 string sessionId = sp.InputVariables["SPP_SYSTEM_SESSION_ID"].ToString();   // System session id from server variable
-                //string folderId = sp.InputVariables["FOLDER_F938266C4CC640FC8C289D1FE732CD3E"].ToString();  // Expects Folder.InstanceId in Input variables
-                string folderId = sp.InputVariables["FOLDER.INSTANCEID"].ToString();  // Expects Folder.InstanceId in Input variables
+                string folderId = sp.InputVariables["FOLDER_F938266C4CC640FC8C289D1FE732CD3E"].ToString();  // Expects Folder.InstanceId in Input variables
                 //string documentId = sp.InputVariables["DOCUMENT_F938266C4CC640FC8C289D1FE732CD3E"].ToString(); // Expects Document.InstanceId in Input variables
 
                 string documentBase64 = sp.InputVariables["DocumentBase64"].ToString();
@@ -53,7 +52,7 @@ namespace MyNamespace
                 documentDataInput.MimeType = documentMimeType;
                 documentDataInput.Data = Convert.FromBase64String(documentBase64);
 
-                Agility.Sdk.Model.Capture.DocumentIdentity documentIdentity = captureDocumentService.CreateDocument3(sessionId, null, folderId, null, null, documentDataInput,1);            
+                Agility.Sdk.Model.Capture.DocumentIdentity documentIdentity = captureDocumentService.CreateDocument3(sessionId, null, folderId, null, null, documentDataInput,0);            
 
 
 
