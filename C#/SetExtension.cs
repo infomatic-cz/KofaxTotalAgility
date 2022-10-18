@@ -10,12 +10,12 @@ using System.Runtime.Serialization;
 using System.Xml;
 using System.Collections;
 // KTA 
-// using TotalAgility.Sdk;
-// using Agility.Sdk.Model;
+using TotalAgility.Sdk;
+using Agility.Sdk.Model;
 using Agility.Server.Scripting.ScriptAssembly;
 // Database
-// using System.Data;
-// using System.Data.SqlClient;
+using System.Data;
+using System.Data.SqlClient;
  
 namespace MyNamespace
 {
@@ -36,100 +36,83 @@ namespace MyNamespace
 
             try
             {
-                // ---- Start logic here ----          
 
-                log.AppendLog("Load input variables");
-                string value = sp.InputVariables["FieldValue"].ToString();   // System session id from server variable
+                CaptureDocumentService captureDocumentService = new CaptureDocumentService();
 
-                bool RemoveLeadingWhitespace = (bool)sp.InputVariables["RemoveLeadingWhitespace"];
-                bool RemoveTrailingWhitespace = (bool)sp.InputVariables["RemoveTrailingWhitespace"];
-                bool RemoveDigits = (bool)sp.InputVariables["RemoveDigits"];
-                bool RemoveWhitespace = (bool)sp.InputVariables["RemoveWhitespace"];
-                bool RemoveSymbols = (bool)sp.InputVariables["RemoveSymbols"];
+                string sessionId = sp.InputVariables["SPP_SYSTEM_SESSION_ID"].ToString();
+                string folderId = sp.InputVariables["RootFolderId"].ToString();
+                string extensionName = sp.InputVariables["SaveEmail_ArchiveIdExtensionName"].ToString();
+                string extensionValue = sp.InputVariables["ArchiveId"].ToString();
 
-                string additionalCharsToRemove = "ˇ";
+                Agility.Sdk.Model.Capture.Folder folder = captureDocumentService.GetFolder(sessionId, null, folderId);
 
-                
-                if (RemoveLeadingWhitespace)
-                {
-                    log.AppendLog("Remove leading white-spaces");
-                    value = value.TrimStart();    
-                }
+                log.AppendLog("Starting processing");
+                SetExtension(sessionId, folder, extensionName, extensionValue);
+                log.AppendLog("Ending processing");
 
-                if (RemoveTrailingWhitespace)
-                {
-                    log.AppendLog("Remove trailing white-spaces");
-                    value = value.TrimEnd();        
-                }
-                
-                // Prepare set of unique chars in string so we can check every thing only once and check on whats needed
-                log.AppendLog("Prepare set of unique chars");
-                //string uniqueChars = new String(value.Distinct().ToArray());
-                char[] uniqueChars = value.Distinct().ToArray();
-                log.AppendLog("Loop unique chars and remove if needed");
-                foreach (char uniqueChar in uniqueChars)
-                {
-                    // Remove digits
-                    if (RemoveDigits && Char.IsDigit(uniqueChar))
-                    {
-                        value = value.Replace(uniqueChar.ToString(), string.Empty);
-                    }
-                    
-                    // Remove whitespace
-                    if (RemoveWhitespace && Char.IsWhiteSpace(uniqueChar))
-                    {
-                        value = value.Replace(uniqueChar.ToString(), string.Empty);
-                    }
-                    
-                    // Remove non-digit, non-letter and non-whitespace
-                    if (RemoveSymbols && !(Char.IsWhiteSpace(uniqueChar) || Char.IsLetterOrDigit(uniqueChar)))
-                    {
-                        value = value.Replace(uniqueChar.ToString(), string.Empty);
-                    }
-                    
-                }
-                
-                // Remove additional chars from list at the begining (some symbols are consideres letters so we can specify them)
-                log.AppendLog("Loop additional chars and remove if needed");
-                if (RemoveSymbols)
-                {
-                    foreach (char additionalCharToRemove in additionalCharsToRemove.ToArray())
-                    {
-                        value = value.Replace(additionalCharToRemove.ToString(), string.Empty);
-                    }    
-                }
-                            
-                sp.OutputVariables["FormattedText"] = value;
-
-
-                // ---- End logic here ----
-                log.AppendLog("Processing concluded");
-                //sp.OutputVariables["ProcessingLog"] = log.SerializeLog();   // update log variable name if needed
-                sp.OutputVariables["ProcessingLog"] = sp.InputVariables["ProcessingLog"].ToString() + Environment.NewLine + Environment.NewLine + log.SerializeLog();   // append to log
+                sp.OutputVariables["LogExtension"] = log.SerializeLog();
             }
             catch (Exception ex)
             {
                 log.WriteToEventLog(ex);
                 throw new SystemException(log.SerializeLog(), ex);
-
-                // StackTrace st = new StackTrace(ex, true);
-                // var frame = st.GetFrame(st.FrameCount - 1);
-                // var lineNumber = frame.GetFileLineNumber();
-                // var fileName = frame.GetFileName();
-                // var methodName = frame.GetMethod().Name;
-
-                // log.WriteToEventLog();
-                // throw new Exception("Error message: "+ex.Message+Environment.NewLine+"Custom log: "+Environment.NewLine+log.SerializeLog() + Environment.NewLine + Environment.NewLine +"Stack trace: "+Environment.NewLine+ ex.StackTrace);
-
-                //throw new Exception("Při zpravoání nastala chyba. Line: " + lineNumber.ToString() + ", Method: " + methodName +
-                //    ", FileName: " + fileName + ", error message: " + ex.Message + ", stacktrace:" + ex.StackTrace);
             }
-
-
         }
 
 
-    
+        /// <summary>
+        /// Všem folderům, dokumentům a stranám nastaví text extension
+        /// </summary>
+        /// <param name="sessionId">SessionId pro volání KTA API</param>
+        /// <param name="folder">Objekt vstupního folderu</param>
+        /// <param name="extensionName">Jméno extension</param>
+        /// <param name="extensionValue">Hodnota extension</param>
+        public void SetExtension(string sessionId, Agility.Sdk.Model.Capture.Folder folder, string extensionName, string extensionValue)
+        {
+            CaptureDocumentService captureDocumentService = new CaptureDocumentService();
+
+            // folder 
+            // SaveFolderTextExtension (string sessionId, ReportingData reportingData, string folderId, string name, string text)
+            log.AppendLog("Set extension to folder "+folder.Id);
+            captureDocumentService.SaveFolderTextExtension(sessionId, null, folder.Id, extensionName, extensionValue);
+
+
+            // Projdu dokumenty a strany ve vstupním folderu
+            if (folder.NumberOfDocuments > 0)
+            {
+                foreach (Agility.Sdk.Model.Capture.Document document in folder.Documents)
+                {
+                    // document
+                    //SaveTextExtension (string sessionId, ReportingData reportingData, string documentId, string name, string text)
+                    log.AppendLog("Set extension to document "+document.Id);
+                    captureDocumentService.SaveTextExtension(sessionId, null, document.Id, extensionName, extensionValue);
+                    if (document.NumberOfPages > 0)
+                    {
+                        foreach (Agility.Sdk.Model.Capture.Page page in document.Pages)
+                        {
+                            // page
+                            log.AppendLog("Set extension to page "+page.Id);
+                            captureDocumentService.SavePageTextExtension(sessionId, null, document.Id, page.Id, extensionName, extensionValue);
+                        }
+                    }
+                }
+            }
+
+            // Rekurzivně volám pro subfoldery
+            if (folder.Folders != null && folder.Folders.Count > 0)
+            {
+                foreach (Agility.Sdk.Model.Capture.Folder subfolder in folder.Folders)
+                {
+                    SetExtension(sessionId, subfolder, extensionName, extensionValue);
+                }
+            }
+        }
+
+
+
+
+
+
         // Classes for logging
         public class LogCollection
         {
@@ -245,7 +228,6 @@ namespace MyNamespace
                     this.DateTime = DateTime.Now;
                     this.Message = message;
                     this.Method = method;
-                    Console.WriteLine(this.ToString());
                 }
 
                 public override string ToString()
@@ -262,5 +244,17 @@ namespace MyNamespace
 
 
 
+
+
     }
 }
+
+
+
+
+
+
+
+
+
+

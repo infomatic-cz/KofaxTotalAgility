@@ -252,12 +252,18 @@ namespace MyNamespace
             // Return string containing names and values of Script parameters passed to C# activity from process
             private static string SerializeScriptParameters(ScriptParameters sp)
             {
-                string scriptParams = "Script input variables:"+Environment.NewLine;
+                string scriptParams = "Script input variables (first 100 chars):"+Environment.NewLine;
                 foreach (DictionaryEntry variable in sp.InputVariables)
                 {
                     if (variable.Value != null)
                     {
-                        scriptParams=scriptParams+"Name: "+variable.Key.ToString()+" type: "+variable.Value.GetType().ToString()+" value: "+variable.Value.ToString()+Environment.NewLine;
+                        string variableValue = variable.Value.ToString();
+                        // Event log is limited to 32k chars so very long variables can exceed this size. Taking first 100 chars should be sufficient for usual variables
+                        if (variable.Value.ToString().Length > 100)
+                        {
+                            variableValue = variable.Value.ToString().Substring(0,100);
+                        }
+                        scriptParams=scriptParams+"Name: "+variable.Key.ToString()+" type: "+variable.Value.GetType().ToString()+" value: "+variableValue+Environment.NewLine;
                     } 
                     else
                     {
@@ -265,12 +271,18 @@ namespace MyNamespace
                     }
                     
                 }
-                scriptParams = scriptParams+"Script output variables:"+Environment.NewLine;
+                scriptParams = scriptParams+"Script output variables (first 100 chars):"+Environment.NewLine;
                 foreach (DictionaryEntry variable in sp.OutputVariables)
                 {
                     if (variable.Value != null)
                     {
-                        scriptParams=scriptParams+"Id: "+variable.Key.ToString()+" type: "+variable.Value.GetType().ToString()+" value: "+variable.Value.ToString()+Environment.NewLine;
+                        string variableValue = variable.Value.ToString();
+                        // Event log is limited to 32k chars so very long variables can exceed this size. Taking first 100 chars should be sufficient for usual variables
+                        if (variable.Value.ToString().Length > 100)
+                        {
+                            variableValue = variable.Value.ToString().Substring(0,100);
+                        }
+                        scriptParams=scriptParams+"Name: "+variable.Key.ToString()+" type: "+variable.Value.GetType().ToString()+" value: "+variableValue+Environment.NewLine;
                     } 
                     else
                     {

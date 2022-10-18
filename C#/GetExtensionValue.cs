@@ -10,12 +10,12 @@ using System.Runtime.Serialization;
 using System.Xml;
 using System.Collections;
 // KTA 
-// using TotalAgility.Sdk;
-// using Agility.Sdk.Model;
+using TotalAgility.Sdk;
+using Agility.Sdk.Model;
 using Agility.Server.Scripting.ScriptAssembly;
 // Database
-// using System.Data;
-// using System.Data.SqlClient;
+using System.Data;
+using System.Data.SqlClient;
  
 namespace MyNamespace
 {
@@ -36,76 +36,38 @@ namespace MyNamespace
 
             try
             {
-                // ---- Start logic here ----          
-
-                log.AppendLog("Load input variables");
-                string value = sp.InputVariables["FieldValue"].ToString();   // System session id from server variable
-
-                bool RemoveLeadingWhitespace = (bool)sp.InputVariables["RemoveLeadingWhitespace"];
-                bool RemoveTrailingWhitespace = (bool)sp.InputVariables["RemoveTrailingWhitespace"];
-                bool RemoveDigits = (bool)sp.InputVariables["RemoveDigits"];
-                bool RemoveWhitespace = (bool)sp.InputVariables["RemoveWhitespace"];
-                bool RemoveSymbols = (bool)sp.InputVariables["RemoveSymbols"];
-
-                string additionalCharsToRemove = "ˇ";
-
-                
-                if (RemoveLeadingWhitespace)
-                {
-                    log.AppendLog("Remove leading white-spaces");
-                    value = value.TrimStart();    
-                }
-
-                if (RemoveTrailingWhitespace)
-                {
-                    log.AppendLog("Remove trailing white-spaces");
-                    value = value.TrimEnd();        
-                }
-                
-                // Prepare set of unique chars in string so we can check every thing only once and check on whats needed
-                log.AppendLog("Prepare set of unique chars");
-                //string uniqueChars = new String(value.Distinct().ToArray());
-                char[] uniqueChars = value.Distinct().ToArray();
-                log.AppendLog("Loop unique chars and remove if needed");
-                foreach (char uniqueChar in uniqueChars)
-                {
-                    // Remove digits
-                    if (RemoveDigits && Char.IsDigit(uniqueChar))
-                    {
-                        value = value.Replace(uniqueChar.ToString(), string.Empty);
-                    }
-                    
-                    // Remove whitespace
-                    if (RemoveWhitespace && Char.IsWhiteSpace(uniqueChar))
-                    {
-                        value = value.Replace(uniqueChar.ToString(), string.Empty);
-                    }
-                    
-                    // Remove non-digit, non-letter and non-whitespace
-                    if (RemoveSymbols && !(Char.IsWhiteSpace(uniqueChar) || Char.IsLetterOrDigit(uniqueChar)))
-                    {
-                        value = value.Replace(uniqueChar.ToString(), string.Empty);
-                    }
-                    
-                }
-                
-                // Remove additional chars from list at the begining (some symbols are consideres letters so we can specify them)
-                log.AppendLog("Loop additional chars and remove if needed");
-                if (RemoveSymbols)
-                {
-                    foreach (char additionalCharToRemove in additionalCharsToRemove.ToArray())
-                    {
-                        value = value.Replace(additionalCharToRemove.ToString(), string.Empty);
-                    }    
-                }
+                // ---- Start logic here ----
+                // Usual input variables
+                string sessionId = sp.InputVariables["SPP_SYSTEM_SESSION_ID"].ToString();   // id of system session if server variable
+                string folderId = sp.InputVariables["FOLDER_F938266C4CC640FC8C289D1FE732CD3E"].ToString();
+                string extensionName = sp.InputVariables["SaveEmail_ArchiveIdExtensionName"].ToString();
                             
-                sp.OutputVariables["FormattedText"] = value;
+                // Define 
+                //CaptureDocumentService captureDocumentService = new CaptureDocumentService();
+                //Agility.Sdk.Model.Capture.Folder folder = captureDocumentService.GetFolder(sessionId, null, folderId);            
 
+                CaptureDocumentService captureDocumentService = new CaptureDocumentService();
+                Agility.Sdk.Model.Capture.Folder folder = captureDocumentService.GetFolder(sessionId, null, folderId);  
+
+                List<string> extensions = new List<string>();
+                extensions = GetExtensions(sessionId, folder, extensionName, extensions);
+
+                if (extensions.Count == 0)
+                {
+                    throw new SystemException("0 unique extension values found, do you have correct extension name?");
+                }
+                else if (extensions.Count == 1)
+                {
+                    sp.OutputVariables["EmailArchiveId"] = Convert.ToInt32(extensions[0]);
+                }
+                else if (extensions.Count > 1)
+                {
+                    throw new SystemException("More then one unique values found");
+                }
 
                 // ---- End logic here ----
                 log.AppendLog("Processing concluded");
-                //sp.OutputVariables["ProcessingLog"] = log.SerializeLog();   // update log variable name if needed
-                sp.OutputVariables["ProcessingLog"] = sp.InputVariables["ProcessingLog"].ToString() + Environment.NewLine + Environment.NewLine + log.SerializeLog();   // append to log
+                sp.OutputVariables["ProcessingLog"] = sp.InputVariables["ProcessingLog"].ToString() + Environment.NewLine + log.SerializeLog();   // update log variable name if needed
             }
             catch (Exception ex)
             {
@@ -127,6 +89,101 @@ namespace MyNamespace
 
 
         }
+
+
+        public static void AddToListIfNotDuplicate(List<string> list, string value)
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                if (!list.Contains(value))
+                {
+                    list.Add(value);
+                }
+            }
+        }
+
+        public List<string> GetExtensions(string sessionId, Agility.Sdk.Model.Capture.Folder folder, string extensionName, List<string> extensions)
+        {
+
+            // if (extensions == null)
+            // {
+            //     extensions = new List<string>();
+            // }
+
+            CaptureDocumentService captureDocumentService = new CaptureDocumentService();
+
+            string extension = "";
+
+            try
+            {
+                // folder 
+                // string 	GetFolderTextExtension (string sessionId, ReportingData reportingData, string folderId, string name)
+                extension = captureDocumentService.GetFolderTextExtension(sessionId, null, folder.Id, extensionName);
+                log.AppendLog("Extension of folder "+folder.Id + " is " + extension);
+
+                AddToListIfNotDuplicate(extensions, extension);
+            }
+            catch (System.Exception)
+            {
+                log.AppendLog("Folder "+folder.Id + " does not contains extension " + extension);
+            }
+            
+
+            // Projdu dokumenty a strany ve vstupním folderu
+            if (folder.NumberOfDocuments > 0)
+            {
+                foreach (Agility.Sdk.Model.Capture.Document document in folder.Documents)
+                {
+                    try
+                    {
+                        // document
+                        //string 	GetTextExtension (string sessionId, ReportingData reportingData, string documentId, string name)
+                        extension = captureDocumentService.GetTextExtension(sessionId, null, document.Id, extensionName);
+                        log.AppendLog("Extension of document "+document.Id + " is " + extension);
+                        AddToListIfNotDuplicate(extensions, extension);
+                    }
+                    catch (System.Exception)
+                    {
+                        log.AppendLog("Document "+document.Id + " does not contains extension " + extension);
+                    }
+                    
+
+                    if (document.NumberOfPages > 0)
+                    {
+                        foreach (Agility.Sdk.Model.Capture.Page page in document.Pages)
+                        {
+                            try
+                            {
+                                // page
+                                // string 	GetPageTextExtension (string sessionId, ReportingData reportingData, string documentId, string pageId, string name)                           
+                                extension = captureDocumentService.GetPageTextExtension(sessionId, null, document.Id, page.Id, extensionName);
+                                log.AppendLog("Extension of page "+page.Id + " is " + extension);
+                                AddToListIfNotDuplicate(extensions, extension);
+                            }
+                            catch (System.Exception)
+                            {
+                                log.AppendLog("Page "+page.Id + " does not contains extension " + extension);
+                            }
+                            
+                        }
+                    }
+                }
+            }
+
+            // Rekurzivně volám pro subfoldery
+            if (folder.Folders != null && folder.Folders.Count > 0)
+            {
+                foreach (Agility.Sdk.Model.Capture.Folder subfolder in folder.Folders)
+                {
+                    GetExtensions(sessionId, subfolder, extensionName, extensions);
+                }
+            }
+
+            return extensions;
+        }
+
+
+
 
 
     
@@ -245,7 +302,6 @@ namespace MyNamespace
                     this.DateTime = DateTime.Now;
                     this.Message = message;
                     this.Method = method;
-                    Console.WriteLine(this.ToString());
                 }
 
                 public override string ToString()
