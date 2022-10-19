@@ -44,13 +44,24 @@ namespace MyNamespace
 
                 string documentBase64 = sp.InputVariables["DocumentBase64"].ToString();
                 string documentMimeType = sp.InputVariables["DocumentMimeType"].ToString();
+                string documentFileName = sp.InputVariables["WT_FileName"].ToString();
 
                 // Define 
                 CaptureDocumentService captureDocumentService = new CaptureDocumentService();
                 
+                Agility.Sdk.Model.Capture.RuntimeFieldCollection runtimeFieldCollection = new Agility.Sdk.Model.Capture.RuntimeFieldCollection();
+                
+                Agility.Sdk.Model.Capture.RuntimeField runtimeField = new Agility.Sdk.Model.Capture.RuntimeField();
+                runtimeField.Id = "1F8220766FAF42278F5CF8081DBF6D87";
+                runtimeField.Name = "FileName";
+                runtimeField.Value = documentFileName;
+
+                runtimeFieldCollection.Add(runtimeField);
+
                 Agility.Sdk.Model.Capture.DocumentDataInput2 documentDataInput = new Agility.Sdk.Model.Capture.DocumentDataInput2();
                 documentDataInput.MimeType = documentMimeType;
                 documentDataInput.Data = Convert.FromBase64String(documentBase64);
+                documentDataInput.RuntimeFields = runtimeFieldCollection;
 
                 Agility.Sdk.Model.Capture.DocumentIdentity documentIdentity = captureDocumentService.CreateDocument3(sessionId, null, folderId, null, null, documentDataInput,0);            
 
