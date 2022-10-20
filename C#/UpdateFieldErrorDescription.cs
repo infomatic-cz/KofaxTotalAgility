@@ -37,15 +37,81 @@ namespace MyNamespace
             try
             {
                 // ---- Start logic here ----
+
+                // Call in document postvalidation handling to translate default transformation errors
+
                 // Usual input variables
                 string sessionId = sp.InputVariables["SPP_SYSTEM_SESSION_ID"].ToString();   // System session id from server variable
-                string folderId = sp.InputVariables["FOLDER_F938266C4CC640FC8C289D1FE732CD3E"].ToString();  // Expects Folder.InstanceId in Input variables
-                string documentId = sp.InputVariables["DOCUMENT_F938266C4CC640FC8C289D1FE732CD3E"].ToString(); // Expects Document.InstanceId in Input variables
-                            
-                // Define 
-                //CaptureDocumentService captureDocumentService = new CaptureDocumentService();
-                //Agility.Sdk.Model.Capture.Folder folder = captureDocumentService.GetFolder(sessionId, null, folderId);            
+                //string folderId = sp.InputVariables["FOLDER_F938266C4CC640FC8C289D1FE732CD3E"].ToString();  // Expects Folder.InstanceId in Input variables
+                string documentId = sp.InputVariables["DOCUMENTID"].ToString(); 
 
+                object[][] fields = sp.InputVariables["Fields"];
+                            
+                // Quick and dirty solution, created for demo purposes
+                Dictionary<string, string> messages = new Dictionary<string, string>();
+                //messages.Add("anglicka hlaska","ceska hlaska");
+                messages.Add("The field extraction was not certain.","Pole nebylo vytěženo s požadovanou mírou jistoty. Pokud je hodnota chybná, doplňte prosím správnou hodnotu. Pokud je hodnota správná, potvrďte prosím pole.");
+                messages.Add("The field cannot be empty. Please provide a value.","Pole nemůže být prázdné. Doplňte prosím správnou hodnotu a potvrďte pole.");
+                
+
+                // Get document 
+                CaptureDocumentService captureDocumentService = new CaptureDocumentService();
+                Agility.Sdk.Model.Capture.Document document = captureDocumentService.GetDocument(sessionId, null, documentId);            
+                
+                foreach (object[] field in fields)
+                {
+                    if (field.Length == 0 || field[0].ToString().Length == 0)
+                    {
+                        continue;
+                    }
+
+                    string fieldId = field[0].ToString();
+                    
+                    // Kontrola jestli existuje požadovaný field
+                    if (document.Fields != null && (document.Fields.Exists(x => x.Id == fieldId)))
+                    {
+                        Agility.Sdk.Model.Capture.RuntimeFieldData fieldData = document.Fields.First(x => x.Id == fieldId);
+
+                        if (fieldData.ErrorDescription == null)
+                        {
+                            continue;
+                        }
+
+                        if (messages.ContainsKey(fieldData.ErrorDescription))
+                        {
+                            captureDocumentService.UpdateDocumentFieldPropertyValues
+                            (
+                                sessionId,
+                                null,
+                                documentId,
+                                new Agility.Sdk.Model.Capture.FieldPropertiesCollection()
+                                {
+                        new Agility.Sdk.Model.Capture.FieldProperties()
+                        {
+                            Identity = new Agility.Sdk.Model.Capture.RuntimeFieldIdentity()
+                            {
+                                    Id = fieldId,
+                            },
+                            PropertyCollection = new Agility.Sdk.Model.Capture.FieldSystemPropertyCollection()
+                            {
+                                new Agility.Sdk.Model.Capture.FieldSystemProperty()
+                                {
+                                    SystemFieldIdentity = new Agility.Sdk.Model.Capture.FieldSystemPropertyIdentity()
+                                    {
+                                        Id = "D0D4F7EB416C4E91BD8A10FC805D5390",
+                                        Name = "ErrorDescription"
+                                    },
+                                    Value = messages[fieldData.ErrorDescription]
+                                }
+                            }
+                        }
+                                }
+                            );
+                        }
+                    }
+                    
+                }
+                
 
 
 
