@@ -38,5 +38,6 @@ error: function (jqXHR, textStatus, errorThrown) {
     //alert("***Error***\n");
     console.log(textStatus);
     console.log(errorThrown);
-}
+},
+async: false
 });

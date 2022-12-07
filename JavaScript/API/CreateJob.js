@@ -65,5 +65,6 @@ $.ajax({
  },
  error: function (jqXHR, textStatus, errorThrown) {
 	 alert("***Error***\n");
- }
+ },
+ async: false
 });
