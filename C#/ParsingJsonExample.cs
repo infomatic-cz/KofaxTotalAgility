@@ -11,14 +11,14 @@ namespace MyNamespace
         [StartMethodAttribute()]
         public void ProcessProjects(ScriptParameters sp)
         {
-            string jsonString = sp.InputVariables["RESPONSE"] as string;
+            string jsonString = sp.InputVariables["RESPONSE"] as string;    // zadání vstupní proměnné
             var jsonArray = JArray.Parse(jsonString);
             var projects = new List<Project>();
 
             foreach (var item in jsonArray)
             {
                 var project = new Project
-                {
+                {    // mapování klíčů dle json struktury
                     Id = GetTokenValue(item, "id", "No ID"),
                     Key = GetTokenValue(item, "key", "No Key"),
                     Name = GetTokenValue(item, "name", "No Name"),
@@ -32,7 +32,7 @@ namespace MyNamespace
                 projects.Add(project);
             }
 
-            sp.OutputVariables["RESULT"] = JsonConvert.SerializeObject(projects);
+            sp.OutputVariables["RESULT"] = JsonConvert.SerializeObject(projects);    // uložení do výstupní proměnné
         }
 
         private string GetTokenValue(JToken token, string path, string defaultValue)
