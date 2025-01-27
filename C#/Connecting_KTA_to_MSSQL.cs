@@ -19,7 +19,7 @@ namespace MyNamespace
 
             string jsonData = filteredResponse.ToString();
 
-            // Načtení připojovacího řetězce z InputVariables
+            // Načtení připojovacího řetězce z InputVariables, jira_conn je zadána jako vstupní serverová proměnná
             object jiraConn = sp.InputVariables["JIRA_CONN"];
             if (jiraConn == null || string.IsNullOrEmpty(jiraConn.ToString()))
             {
